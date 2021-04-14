@@ -6,16 +6,6 @@ from math import sin, cos, sqrt
 from PIL import Image
 
 
-def draw_menu(path):
-    image = Image.open(path)
-    size = image.size
-    pix = image.load()
-    sp = []
-    for i in range(size[0]):
-        for j in range(size[1]):
-            sp.append([[i, j], pix[i, j]])
-    return sp
-
 
 class Window:
     def __init__(self, size, name):
@@ -33,19 +23,6 @@ class Window:
         WHITE = sdl2.ext.Color(r, g, b)
         pixelview = sdl2.ext.PixelView(surface)
         pixelview[y][x] = WHITE
-
-    def draw_menu(self):
-        matrix = draw_menu('Menu.png')
-        for i in matrix:
-            Window.d1_point(self, i[0][0], i[0][1], self.window.get_surface(), i[1][:-1])
-
-    def d_point(self, x, y, color):
-        r, g, b = color
-        renderer = sdl2.ext.Renderer(self.window)
-        renderer.draw_point([x, y], sdl2.ext.Color(r, g, b))
-        renderer.present()
-        processor = sdl2.ext.TestEventProcessor()
-        processor.run(self.window)
 
     def line_vert(self, x, y, l, color=(0, 0, 0)):
         Window.d1_point(self, x, y, self.window.get_surface(), color)
@@ -96,33 +73,6 @@ class Window:
             x += dx
             y += dy
             Window.d1_point(self, round(x), round(y), self.window.get_surface(), color)
-
-    def hexagon(self, x, y, length, new_image, color=(0, 0, 0)):
-        bside = round(length * sin(60 / 180 * 3.14))
-        cside = round(length * sin(30 / 180 * 3.14))
-        drawDDA(self, x, y, x + length, y, color)
-        drawDDA(self, x, y - bside * 2, x + length, y - bside * 2, color)
-        y1, x1 = y - bside, x - cside
-        y2, x2 = y - bside, x + length + cside
-        drawDDA(self, x, y, x1, y1, color)
-        drawDDA(self, x1, y1, x, y - bside * 2, color)
-        drawDDA(self, x + length, y, x2, y2, color)
-        drawDDA(self, x + length, y - bside * 2, x2, y2, color)
-        Window.d1_point(self, x2, y2, self.window.get_surface(), color)
-
-    def pentagon(self, x, y, length, new_image, color=(0, 0, 0)):
-        draw = ImageDraw.Draw(new_image)
-        bside = round(length * sin(54 / 180 * 3.14)) * 2
-        cside = round(length * sin(36 / 180 * 3.14))
-        heigth1 = round(sqrt(pow(bside, 2) - pow(length / 2, 2)))
-        drawDDA(self, x, y, x + length, y, color)
-        y1, x1 = y - heigth1 + cside, x + length / 2 - bside / 2
-        y2, x2 = y1, x + length / 2 + bside / 2
-        drawDDA(self, x + length / 2, y - heigth1, x1, y1, color)
-        drawDDA(self, x + length / 2, y - heigth1, x2, y2, color)
-        drawDDA(self, x1, y1, x, y, color)
-        drawDDA(self, x2, y2, x + length, y, color)
-
 
 
     def run(self):
@@ -208,7 +158,7 @@ class Window:
 
 
 def main():
-    window = Window((1921, 1081), "No Best Game")
+    window = Window((1081, 721), "No Best Game")
 
     window.run()
     # window.fill_Window((240, 0, 0))
