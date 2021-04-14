@@ -208,7 +208,7 @@ class Window:
 
 
 def main():
-    window = Window((1081, 721), "No Best Game")
+    window = Window((1921, 1081), "No Best Game")
 
     window.run()
     # window.fill_Window((240, 0, 0))
