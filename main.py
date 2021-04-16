@@ -73,7 +73,29 @@ class Window:
             x += dx
             y += dy
             Window.d1_point(self, round(x), round(y), self.window.get_surface(), color)
+            
+    def draw_bomb(self, x, y, color1, color2):
+        Window.rectangle1(self, x, y, 7, 7, color1)
+        Window.rectangle1(self, x + 7, y + 7, 35, 35, color1)
+        Window.rectangle1(self, x + 21, y, 7, 7, color1)
+        Window.rectangle1(self, x + 21, y - 7, 7, 7, color1)
+        Window.rectangle1(self, x + 21 + 21, y, 7, 7, color1)
+        Window.rectangle1(self, x, y + 21, 7, 7, color1)
+        Window.rectangle1(self, x- 7, y + 21, 7, 7, color1)
+        Window.rectangle1(self, x, y + 42, 7, 7, color1)
+        Window.rectangle1(self, x, y + 42, 7, 7, color1)
 
+        Window.rectangle1(self, x + 21, y + 42, 7, 7, color1)
+        Window.rectangle1(self, x +21, y + 42, 7, 7, color1)
+        Window.rectangle1(self, x + 21, y + 49, 7, 7, color1)
+
+        Window.rectangle1(self, x + 42, y + 42, 7, 7, color1)
+        Window.rectangle1(self, x + 42, y + 21, 7, 7, color1)
+        Window.rectangle1(self, x + 49, y + 21, 7, 7, color1)
+        
+        Window.rectangle1(self, x + 25, y + 15, 5, 5, color2)
+        Window.rectangle1(self, x + 30, y + 15, 5, 5, color2)
+        Window.rectangle1(self, x + 30, y + 20, 5, 5, color2)
 
     def run(self):
         sdl2.ext.init()
