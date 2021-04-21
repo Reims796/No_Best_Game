@@ -4,7 +4,7 @@ import sdl2.ext
 import sdl2.sdlgfx
 from math import sin, cos, sqrt
 from PIL import Image
-
+import random
 
 class Window:
     def __init__(self, size, name, pos_b):
@@ -51,7 +51,8 @@ class Window:
         Window.rectangle(self, x + 25, y + 15, 5, 5, color2)
         Window.rectangle(self, x + 30, y + 15, 5, 5, color2)
         Window.rectangle(self, x + 30, y + 20, 5, 5, color2)
- # sp = [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17), (8, 198, 245), (245, 129, 5)]
+
+    # sp = [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17), (8, 198, 245), (245, 129, 5)]
     def boat_contour(self, x, y, sp):
         Window.rectangle(self, x, y, 8, 8, sp[0])
         Window.rectangle(self, x - 8, y + 8, 8, 16, sp[0])
@@ -82,7 +83,7 @@ class Window:
 
         Window.rectangle(self, x, y + 8, 8, 24, sp[3])
         Window.rectangle(self, x + 8, y + 24, 8, 8, sp[3])
-        Window.rectangle(self, x - 8, y + 56, 24, 8,sp[3])
+        Window.rectangle(self, x - 8, y + 56, 24, 8, sp[3])
         Window.rectangle(self, x + 16, y + 32, 8, 40, sp[3])
         Window.rectangle(self, x + 24, y + 40, 8, 32, sp[3])
         Window.rectangle(self, x + 32, y + 56, 8, 16, sp[3])
@@ -107,13 +108,10 @@ class Window:
         Window.rectangle(self, x - 16, y + 128, 8, 16, sp[-1])
         Window.rectangle(self, x + 16, y + 128, 8, 16, sp[-1])
 
-
     def draw_boat(self, x, y, sp):
         Window.boat_contour(self, x, y, sp)
         Window.boat_red(self, x, y, sp)
         Window.boat_color(self, x, y, sp)
-
-
 
     def run(self):
         sdl2.ext.init()
@@ -124,18 +122,45 @@ class Window:
         # Window.draw_menu(self)
         while running:
             events = sdl2.ext.get_events()
+            s = random.randint(0, 5)
+            if s == 2 or 4:
+                print(s)
             for event in events:
                 if event.type == sdl2.SDL_QUIT:
                     running = False
                     break
                 elif event.type == sdl2.SDL_KEYDOWN:
                     if event.key.keysym.sym == sdl2.SDLK_SPACE:
+                        ss = random.randint(0, 5)
+                        if s == 2 or 4:
+                            print(s)
                         Window.draw_bomb(self, 100, 100, (166, 166, 166), (255, 255, 255))
-                        Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17), (8, 198, 245), (245, 129, 5)])
+                        Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
+                                         [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
+                                          (8, 198, 245), (245, 129, 5)])
                     elif event.key.keysym.sym == sdl2.SDLK_LEFT:
-                        Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [(43, 122, 168) for _ in range(8)])
-                        self.pos_b = [self.pos_b[0] - 50, self.pos_b[1]]
-                        Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17), (8, 198, 245), (245, 129, 5)])
+                        if self.pos_b[0] > 100 and self.pos_b[1] and self.pos_b[0] < 900 and self.pos_b[1] < 710:
+
+                            Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [(43, 122, 168) for _ in range(8)])
+                            self.pos_b = [self.pos_b[0] - 50, self.pos_b[1]]
+                            Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
+                                             [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
+                                              (8, 198, 245), (245, 129, 5)])
+                        else:
+                            self.pos_b[0] = 55
+                    elif event.key.keysym.sym == sdl2.SDLK_RIGHT:
+                        if self.pos_b[0] > 50 and self.pos_b[1] and self.pos_b[0] < 850 and self.pos_b[1] < 710:
+                            try:
+                                print(self.pos_b)
+                                Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [(43, 122, 168) for _ in range(8)])
+                                self.pos_b = [self.pos_b[0] + 50, self.pos_b[1]]
+                                Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
+                                                 [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
+                                                  (8, 198, 245), (245, 129, 5)])
+                            except:
+                                pass
+                        else:
+                            self.pos_b[0] = 899
             self.window.refresh()
         return 0
 
