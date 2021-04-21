@@ -139,34 +139,26 @@ class Window:
                                          [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
                                           (8, 198, 245), (245, 129, 5)])
                     elif event.key.keysym.sym == sdl2.SDLK_LEFT:
-                        if self.pos_b[0] > 100 and self.pos_b[1] and self.pos_b[0] < 900 and self.pos_b[1] < 710:
-
+                        if self.pos_b[0] >= 100 and self.pos_b[0] <= 950:
                             Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [(43, 122, 168) for _ in range(8)])
                             self.pos_b = [self.pos_b[0] - 50, self.pos_b[1]]
                             Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
                                              [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
                                               (8, 198, 245), (245, 129, 5)])
-                        else:
-                            self.pos_b[0] = 55
                     elif event.key.keysym.sym == sdl2.SDLK_RIGHT:
-                        if self.pos_b[0] > 50 and self.pos_b[1] and self.pos_b[0] < 850 and self.pos_b[1] < 710:
-                            try:
-                                print(self.pos_b)
-                                Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [(43, 122, 168) for _ in range(8)])
-                                self.pos_b = [self.pos_b[0] + 50, self.pos_b[1]]
-                                Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
-                                                 [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
-                                                  (8, 198, 245), (245, 129, 5)])
-                            except:
-                                pass
-                        else:
-                            self.pos_b[0] = 899
+                        if self.pos_b[0] >= 50 and self.pos_b[0] <= 900:
+                            Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [(43, 122, 168) for _ in range(8)])
+                            self.pos_b = [self.pos_b[0] + 50, self.pos_b[1]]
+                            Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
+                                             [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
+                                              (8, 198, 245), (245, 129, 5)])
+
             self.window.refresh()
         return 0
 
 
 def main():
-    window = Window((1081, 721), "No Best Game", [540, 500])
+    window = Window((1080, 720), "No Best Game", [540, 500])
 
     window.run()
     # window.fill_Window((240, 0, 0))
