@@ -120,20 +120,27 @@ class Window:
         running = True
         Window.fill_Window(self, (43, 122, 168))
         # Window.draw_menu(self)
+        s = None
+        y = 100
         while running:
             events = sdl2.ext.get_events()
-            s = random.randint(0, 5)
-            if s == 2 or 4:
-                print(s)
+            if s  == None:
+                s = random.randint(100, 930)
+            if s != None:
+                try:
+                    Window.draw_bomb(self, s, y, (43, 122, 168), (43, 122, 168))
+                    Window.draw_bomb(self, s, y + 10, (166, 166, 166), (255, 255, 255))
+                    y+= 10
+                except:
+                    s = None
+                    y = 100
+                    Window.rectangle(self, 1, 720 - 57, 1079, 57, color=(43, 122, 168))
             for event in events:
                 if event.type == sdl2.SDL_QUIT:
                     running = False
                     break
                 elif event.type == sdl2.SDL_KEYDOWN:
                     if event.key.keysym.sym == sdl2.SDLK_SPACE:
-                        ss = random.randint(0, 5)
-                        if s == 2 or 4:
-                            print(s)
                         Window.draw_bomb(self, 100, 100, (166, 166, 166), (255, 255, 255))
                         Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
                                          [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
@@ -156,14 +163,12 @@ class Window:
             self.window.refresh()
         return 0
 
-
 def main():
-    window = Window((1080, 720), "No Best Game", [540, 500])
+    window = Window((1080, 720), "No Best Game", [540, 490])
 
     window.run()
     # window.fill_Window((240, 0, 0))
     # fill_Window(window, 240, 0, 0)
-
 
 if __name__ == "__main__":
     # window = Window((1080, 720), (240, 40, 40), "No Best Game")
