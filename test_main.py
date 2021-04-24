@@ -62,6 +62,37 @@ class Window:
         sp1 += Window.rectangle(self, x + 30, y + 20, 5, 5, color2)
         return sp1
     # sp = [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17), (8, 198, 245), (245, 129, 5)]
+    def draw_hearts(self, col_hearts, x1, y1):
+        if col_hearts == 3:
+            image = Image.open('3.png')
+            size = image.size
+            pix = image.load()
+            for x in range(size[0]):
+                for y in range(size[1]):
+                    color = pix[x, y][:3]
+                    Window.d1_point(self, x1 + x, y1 + y, self.window.get_surface(), color)
+        elif col_hearts == 2:
+            image = Image.open('2.png')
+            size = image.size
+            pix = image.load()
+            for x in range(size[0]):
+                for y in range(size[1]):
+                    color = pix[x, y][:3]
+                    if color != (43, 122, 168):
+                        Window.d1_point(self, x1 + x, y1 + y, self.window.get_surface(), color)
+        elif col_hearts == 1:
+            sp = []
+            image = Image.open('1.png')
+            size = image.size
+            pix = image.load()
+            for x in range(size[0]):
+                for y in range(size[1]):
+                    color = pix[x, y][:3]
+                    if color != (43, 122, 168):
+                        Window.d1_point(self, x1 + x, y1 + y, self.window.get_surface(), color)
+        else:
+            return 'error'
+
 
     def boat_contour(self, x, y, sp):
         sp1 = []
@@ -124,8 +155,7 @@ class Window:
 
     def draw_menu(self):
         Window.fill_Window(self, (255, 0, 0))
-        sp = []
-        image = Image.open('No_Best_Game\pixil-frame-0_2.png')
+        image = Image.open('pixil-frame-0_2.png')
         size = image.size
         pix = image.load()
         for x in range(size[0]):
@@ -137,8 +167,7 @@ class Window:
 
     def draw_pravila(self):
         Window.fill_Window(self, (255, 0, 0))
-        sp = []
-        image = Image.open('No_Best_Game\pixil-frame-0_1.png')
+        image = Image.open('pixil-frame-0_1.png')
         size = image.size
         pix = image.load()
         for x in range(size[0]):
@@ -151,9 +180,11 @@ class Window:
     def run(self):
         sdl2.ext.init()
         # window = sdl2.ext.Window(self.name, size=self.size)
+        col_heart = 3
         self.window.show()
         running = True
         start_game = False
+        Window.draw_hearts(self, 3, 197, 100)
         #Window.fill_Window(self, (43, 122, 168))
         Window.draw_menu(self)
         s = None
@@ -178,12 +209,14 @@ class Window:
                         Window.rectangle(self, 1, 720 - 57,
                                          1079, 57, color=(43, 122, 168))
             #print(sp_boat)
-            if not check_collision(sp_boat, sp_bomb):
+            if check_collision(sp_boat, sp_bomb):
                 pass
             else:
                 try:
-                    Window.draw_bomb(self, s, y + 10, (43, 122, 168), (43, 122, 168))
-                    #print(-1)
+                    Window.draw_bomb(self, s, y, (43, 122, 168), (43, 122, 168))
+                    col_heart -= 1
+                    Window.rectangle(self, 947, 0, 133, 31, (43, 122, 168))
+                    Window.draw_hearts(self, col_heart, 947, 0)
                     s = None
                     y = 100
                 except:
@@ -196,7 +229,9 @@ class Window:
                     if event.key.keysym.sym == sdl2.SDLK_SPACE:
                         start_game = True
                         #Window.draw_bomb(self, 100, 100, (166, 166, 166), (255, 255, 255))
+                        
                         Window.fill_Window(self, (43, 122, 168))
+                        Window.draw_hearts(self, 3, 947, 0)
                         sp_boat = Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
                                                    [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
                                                     (8, 198, 245), (245, 129, 5)])
