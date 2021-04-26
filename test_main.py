@@ -5,13 +5,16 @@ import sdl2.sdlgfx
 from math import sin, cos, sqrt
 from PIL import Image
 import random
+import time
+import pygame as pg
+
 
 
 def check_collision(sp1, sp2):
     for i in sp1:
         if i in sp2:
-            return False
-    return True
+            return True
+    return False
 
 
 class Window:
@@ -43,23 +46,21 @@ class Window:
     def draw_bomb(self, x, y, color1, color2):
         sp1 = []
         sp1 += Window.rectangle(self, x, y, 7, 7, color1)
-        sp1 += Window.rectangle(self, x + 7, y + 7, 35, 35, color1)
+        Window.rectangle(self, x + 7, y + 7, 35, 35, color1)
         sp1 += Window.rectangle(self, x + 21, y, 7, 7, color1)
         sp1 += Window.rectangle(self, x + 21, y - 7, 7, 7, color1)
         sp1 += Window.rectangle(self, x + 21 + 21, y, 7, 7, color1)
         sp1 += Window.rectangle(self, x, y + 21, 7, 7, color1)
         sp1 += Window.rectangle(self, x - 7, y + 21, 7, 7, color1)
         sp1 += Window.rectangle(self, x, y + 42, 7, 7, color1)
-        sp1 += Window.rectangle(self, x, y + 42, 7, 7, color1)
-        sp1 += Window.rectangle(self, x + 21, y + 42, 7, 7, color1)
         sp1 += Window.rectangle(self, x + 21, y + 42, 7, 7, color1)
         sp1 += Window.rectangle(self, x + 21, y + 49, 7, 7, color1)
         sp1 += Window.rectangle(self, x + 42, y + 42, 7, 7, color1)
         sp1 += Window.rectangle(self, x + 42, y + 21, 7, 7, color1)
         sp1 += Window.rectangle(self, x + 49, y + 21, 7, 7, color1)
-        sp1 += Window.rectangle(self, x + 25, y + 15, 5, 5, color2)
-        sp1 += Window.rectangle(self, x + 30, y + 15, 5, 5, color2)
-        sp1 += Window.rectangle(self, x + 30, y + 20, 5, 5, color2)
+        Window.rectangle(self, x + 25, y + 15, 5, 5, color2)
+        Window.rectangle(self, x + 30, y + 15, 5, 5, color2)
+        Window.rectangle(self, x + 30, y + 20, 5, 5, color2)
         return sp1
     # sp = [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17), (8, 198, 245), (245, 129, 5)]
     def draw_hearts(self, col_hearts, x1, y1):
@@ -90,8 +91,6 @@ class Window:
                     color = pix[x, y][:3]
                     if color != (43, 122, 168):
                         Window.d1_point(self, x1 + x, y1 + y, self.window.get_surface(), color)
-        else:
-            return 'error'
 
 
     def boat_contour(self, x, y, sp):
@@ -108,13 +107,31 @@ class Window:
         sp1 += Window.rectangle(self, x - 40, y + 56, 8, 104, sp[0])
         sp1 += Window.rectangle(self, x + 40, y + 56, 8, 104, sp[0])
         sp1 += Window.rectangle(self, x - 40, y + 160, 88, 8, sp[0])
-        sp1 += Window.rectangle(self, x - 8, y + 32, 24, 24, sp[0])
-        sp1 += Window.rectangle(self, x - 8, y + 64, 24, 8, sp[0])
-        sp1 += Window.rectangle(self, x - 24, y + 72, 56, 80, sp[0])
-        sp1 += Window.rectangle(self, x, y + 40, 8, 8, sp[1])
-        sp1 += Window.rectangle(self, x, y + 72, 8, 8, sp[1])
-        sp1 += Window.rectangle(self, x - 8, y + 80, 8, 8, sp[1])
         return sp1
+
+    def boat_contour1(self, x, y, sp):
+        sp1 = []
+        sp1 += Window.rectangle(self, x, y, 1, 1, sp[0])
+        sp1 += Window.rectangle(self, x - 8, y + 8, 1, 2, sp[0])
+        sp1 += Window.rectangle(self, x + 8, y + 8, 1, 2, sp[0])
+        sp1 += Window.rectangle(self, x - 16, y + 24, 1, 1, sp[0])
+        sp1 += Window.rectangle(self, x + 16, y + 24, 1, 1, sp[0])
+        sp1 += Window.rectangle(self, x - 24, y + 32, 1, 1, sp[0])
+        sp1 += Window.rectangle(self, x + 24, y + 32, 1, 1, sp[0])
+        sp1 += Window.rectangle(self, x - 32, y + 40, 1, 1, sp[0])
+        sp1 += Window.rectangle(self, x + 32, y + 40, 1, 1, sp[0])
+        sp1 += Window.rectangle(self, x - 40, y + 56, 1, 13, sp[0])
+        sp1 += Window.rectangle(self, x + 40, y + 56, 1, 13, sp[0])
+        sp1 += Window.rectangle(self, x - 40, y + 160, 11, 1, sp[0])
+        return sp1
+
+    def boat1(self, x, y, sp):
+        Window.rectangle(self, x - 8, y + 32, 24, 24, sp[0])
+        Window.rectangle(self, x - 8, y + 64, 24, 8, sp[0])
+        Window.rectangle(self, x - 24, y + 72, 56, 80, sp[0])
+        Window.rectangle(self, x, y + 40, 8, 8, sp[1])
+        Window.rectangle(self, x, y + 72, 8, 8, sp[1])
+        Window.rectangle(self, x - 8, y + 80, 8, 8, sp[1])
 
     def boat_red(self, x, y, sp):
         Window.rectangle(self, x - 8, y + 24, 8, 8, sp[2])
@@ -150,7 +167,16 @@ class Window:
         sp11 = []
         sp11 += Window.boat_contour(self, x, y, sp)
         Window.boat_red(self, x, y, sp)
+        Window.boat1(self, x, y, sp)
         Window.boat_color(self, x, y, sp)
+        return sp11
+
+    def draw_boat1(self, x, y, sp):
+        sp11 = []
+        sp11 += Window.boat_contour1(self, x, y, sp)
+        #Window.boat_red(self, x, y, sp)
+        #Window.boat1(self, x, y, sp)
+        #Window.boat_color(self, x, y, sp)
         return sp11
 
     def draw_menu(self):
@@ -162,8 +188,18 @@ class Window:
             for y in range(size[1]):
                 #print(pix[x, y])
                 if pix[x, y] != (255, 0, 0, 255):
-                    Window.d1_point(
-                        self, x, y, self.window.get_surface(), (0, 0, 0))
+                    Window.d1_point(self, x, y, self.window.get_surface(), (0, 0, 0))
+
+    def draw_game_over(self):
+        Window.fill_Window(self, (0, 0, 0))
+        image = Image.open('pixil-frame-0_3.png')
+        size = image.size
+        pix = image.load()
+        for x in range(size[0]):
+            for y in range(size[1]):
+                #print(pix[x, y])
+                if pix[x, y] != (0, 0, 0, 255):
+                    Window.d1_point(self, x, y, self.window.get_surface(), (255, 0, 0))
 
     def draw_pravila(self):
         Window.fill_Window(self, (255, 0, 0))
@@ -184,9 +220,10 @@ class Window:
         self.window.show()
         running = True
         start_game = False
-        Window.draw_hearts(self, 3, 197, 100)
-        #Window.fill_Window(self, (43, 122, 168))
+        #Window.draw_hearts(self, 3, 197, 100)
+        Window.fill_Window(self, (43, 122, 168))
         Window.draw_menu(self)
+        level = random.randint(1, 2)
         s = None
         y = 100
         sp_boat = []
@@ -196,31 +233,49 @@ class Window:
             if start_game == True:
                 if s == None:
                     s = random.randint(100, 930)
-                if s != None:
+                elif s != None and check_collision(sp_boat, sp_bomb) != True:
                     try:
-                        Window.draw_bomb(
-                            self, s, y, (43, 122, 168), (43, 122, 168))
-                        sp_bomb = Window.draw_bomb(
-                            self, s, y + 50, (166, 166, 166), (255, 255, 255))
-                        y += 50
+                        Window.draw_bomb(self, s, y, (43, 122, 168), (43, 122, 168))
+                        if level == 1:
+                            sp_bomb = Window.draw_bomb(self, s, y + 50, (166, 166, 166), (255, 255, 255))
+                            y += 50
+                        elif level == 2:
+                            sp_bomb = Window.draw_bomb(self, s, y + 100, (166, 166, 166), (255, 255, 255))
+                            y += 100
                     except:
                         s = None
                         y = 100
-                        Window.rectangle(self, 1, 720 - 57,
-                                         1079, 57, color=(43, 122, 168))
-            #print(sp_boat)
-            if check_collision(sp_boat, sp_bomb):
-                pass
-            else:
-                try:
-                    Window.draw_bomb(self, s, y, (43, 122, 168), (43, 122, 168))
-                    col_heart -= 1
-                    Window.rectangle(self, 947, 0, 133, 31, (43, 122, 168))
-                    Window.draw_hearts(self, col_heart, 947, 0)
-                    s = None
-                    y = 100
-                except:
-                    pass
+                        Window.rectangle(self, 99, 720 - 57,
+                                         1079 - 200, 57, color=(43, 122, 168))
+                elif check_collision(sp_boat, sp_bomb) == True:
+                    try:
+                        Window.draw_bomb(self, s, y, (43, 122, 168), (43, 122, 168))
+                        col_heart = col_heart - 1
+                        Window.rectangle(self, 947, 0, 133, 31, (43, 122, 168))
+                        Window.draw_hearts(self, col_heart, 947, 0)
+                        s = None
+                        y = 100
+                        sp_bomb = []
+                    except Exception as e:
+                        print(e)
+                if col_heart == 0:
+                    Window.draw_game_over(self)
+                    start_game = False
+            #if check_collision(sp_boat, sp_bomb) and start_game == True:
+            #    try:
+            #        Window.draw_bomb(self, s, y, (43, 122, 168), (43, 122, 168))
+            #        col_heart -= 1
+            #        Window.rectangle(self, 947, 0, 133, 31, (43, 122, 168))
+            #        Window.draw_hearts(self, col_heart, 947, 0)
+            #        s = None
+            #        y = 100
+            #    except Exception as e:
+            #        print(e)
+            #    #Window.draw_bomb(self, s, y, (43, 122, 168), (43, 122, 168))
+            #    #col_heart -= 1
+            #    #print(col_heart)
+            #else:
+            #    pass
             for event in events:
                 if event.type == sdl2.SDL_QUIT:
                     running = False
@@ -229,27 +284,47 @@ class Window:
                     if event.key.keysym.sym == sdl2.SDLK_SPACE:
                         start_game = True
                         #Window.draw_bomb(self, 100, 100, (166, 166, 166), (255, 255, 255))
-                        
                         Window.fill_Window(self, (43, 122, 168))
                         Window.draw_hearts(self, 3, 947, 0)
-                        sp_boat = Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
-                                                   [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
-                                                    (8, 198, 245), (245, 129, 5)])
+                        col_heart = 3
+                        if level == 1:
+                            sp_boat = Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
+                                                       [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
+                                                        (8, 198, 245), (245, 129, 5)])
+                        elif level == 2:
+                            sp_boat = Window.draw_boat1(self, self.pos_b[0], self.pos_b[1],
+                                                       [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
+                                                        (8, 198, 245), (245, 129, 5)])
                     elif event.key.keysym.sym == sdl2.SDLK_LEFT:
                         if self.pos_b[0] >= 100 and self.pos_b[0] <= 950:
-                            Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [
-                                             (43, 122, 168) for _ in range(8)])
-                            self.pos_b = [self.pos_b[0] - 50, self.pos_b[1]]
-                            Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
-                                             [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
-                                              (8, 198, 245), (245, 129, 5)])
+                            if level == 1:
+                                sp_boat = Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [
+                                                 (43, 122, 168) for _ in range(8)])
+                                self.pos_b = [self.pos_b[0] - 50, self.pos_b[1]]
+                                sp_boat = Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
+                                                 [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
+                                                  (8, 198, 245), (245, 129, 5)])
+                            elif level == 2:
+                                sp_boat = Window.draw_boat1(self, self.pos_b[0], self.pos_b[1], [
+                                                 (43, 122, 168) for _ in range(8)])
+                                self.pos_b = [self.pos_b[0] - 50, self.pos_b[1]]
+                                sp_boat = Window.draw_boat1(self, self.pos_b[0], self.pos_b[1],
+                                                 [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17),
+                                                  (8, 198, 245), (245, 129, 5)])
                     elif event.key.keysym.sym == sdl2.SDLK_RIGHT:
                         if self.pos_b[0] >= 50 and self.pos_b[0] <= 900:
-                            Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [
-                                             (43, 122, 168) for _ in range(8)])
-                            self.pos_b = [self.pos_b[0] + 50, self.pos_b[1]]
-                            Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
-                                             [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17), (8, 198, 245), (245, 129, 5)])
+                            if level == 1:
+                                sp_boat = Window.draw_boat(self, self.pos_b[0], self.pos_b[1], [
+                                                 (43, 122, 168) for _ in range(8)])
+                                self.pos_b = [self.pos_b[0] + 50, self.pos_b[1]]
+                                sp_boat = Window.draw_boat(self, self.pos_b[0], self.pos_b[1],
+                                                 [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17), (8, 198, 245), (245, 129, 5)])
+                            elif level == 2:
+                                sp_boat = Window.draw_boat1(self, self.pos_b[0], self.pos_b[1], [
+                                                 (43, 122, 168) for _ in range(8)])
+                                self.pos_b = [self.pos_b[0] + 50, self.pos_b[1]]
+                                sp_boat = Window.draw_boat1(self, self.pos_b[0], self.pos_b[1],
+                                                 [(0, 0, 0), (255, 255, 255), (245, 3, 18), (150, 0, 18), (99, 2, 17), (8, 198, 245), (245, 129, 5)])
                     elif event.key.keysym.sym == sdl2.SDLK_p:
                         Window.draw_pravila(self)
                     elif event.key.keysym.sym == sdl2.SDLK_m:
@@ -261,12 +336,15 @@ class Window:
 
 def main():
     window = Window((1080, 720), "No Best Game", [540, 490])
-
+    pg.init()
+    pg.mixer.music.load('musik.mp3')
+    pg.mixer.music.play()
     window.run()
     # window.fill_Window((240, 0, 0))
     # fill_Window(window, 240, 0, 0)
 
 
 if __name__ == "__main__":
+    
     # window = Window((1080, 720), (240, 40, 40), "No Best Game")
     sys.exit(main())
